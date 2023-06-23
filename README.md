@@ -15,4 +15,4 @@ subtraction, multiplication, and division.
 ## `Installation`
 <li>Clone the repository: git clone https://github.com/riyanachwani/calculator.git </li>
 <li>Open the project folder in your preferred IDE.</li>
-<li></li>Run the project</li>
+<li>Run the project</li>
