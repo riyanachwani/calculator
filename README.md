@@ -6,7 +6,7 @@
 ## `Project Title`
 Calculator
 ## `Description`
-A TechnoHacks internship project that performs basic arithmetic operations such as addition,
+A Java internship project that performs basic arithmetic operations such as addition,
 subtraction, multiplication, and division.
 
 ## `Tech Stack Used`
