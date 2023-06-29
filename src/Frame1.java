@@ -1,3 +1,6 @@
+
+import java.util.Stack;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -43,6 +46,7 @@ public class Frame1 extends javax.swing.JFrame {
         three = new javax.swing.JButton();
         txt = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        lbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -181,13 +185,20 @@ public class Frame1 extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 48)); // NOI18N
         jLabel1.setText("Calculator");
 
+        lbl.setForeground(new java.awt.Color(242, 242, 242));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125))
             .addGroup(layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -224,15 +235,13 @@ public class Frame1 extends javax.swing.JFrame {
                             .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(eq, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(19, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(125, 125, 125))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap()
+                .addComponent(lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,7 +269,7 @@ public class Frame1 extends javax.swing.JFrame {
                     .addComponent(two, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(one, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(zero, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         pack();
@@ -287,9 +296,80 @@ txt.setText(txt.getText()+"*");
     }//GEN-LAST:event_mulActionPerformed
 
     private void eqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eqActionPerformed
-        // TODO add your handling code here:
+       String a=txt.getText();
+       Double ans=Arithmetic(a);
+       txt.setText(ans.toString());
     }//GEN-LAST:event_eqActionPerformed
-
+ 
+    public static double Arithmetic(String expression)
+    {
+        char[] tokens = expression.toCharArray();
+        Stack<Double> values = new Stack<Double>();
+        Stack<Character> ops = new Stack<Character>();
+        for (int i = 0; i < tokens.length; i++)
+        {
+            if (tokens[i] == ' ')
+                continue;
+            if (tokens[i] >= '0' && tokens[i] <= '9')
+            {
+                StringBuffer sbuf = new StringBuffer();
+                while (i < tokens.length && tokens[i] >= '0' && tokens[i] <= '9')
+                    sbuf.append(tokens[i++]);
+                values.push(Double.parseDouble(sbuf.toString()));
+                  i--;
+            }
+            else if (tokens[i] == '(')
+                ops.push(tokens[i]);
+            else if (tokens[i] == ')')
+            {
+                while (ops.peek() != '(')
+                  values.push(applyOp(ops.pop(),values.pop(),values.pop()));
+                ops.pop();
+            }
+            else if (tokens[i] == '+' || tokens[i] == '-' || tokens[i] == 'x' || tokens[i] == '/' || tokens[i] == '%' || tokens[i] == '^'  || tokens[i]=='.')
+            {
+                while (!ops.empty() && hasPrecedence(tokens[i],ops.peek()))
+                  values.push(applyOp(ops.pop(),values.pop(), values.pop()));
+                ops.push(tokens[i]);
+            }
+        }
+        while (!ops.empty())
+            values.push(applyOp(ops.pop(),values.pop(),values.pop()));
+        return values.pop();
+    }
+    public static boolean hasPrecedence(char op1, char op2)
+    {
+        if (op2 == '(' || op2 == ')')
+            return false;
+        if ((op1 == '*' || op1 == '/' || op1=='%' || op1=='^' || op1=='.') && (op2 == '+' || op2 == '-'))
+            return false;
+        else
+            return true;
+    }
+    public static double applyOp(char op, double b, double a)
+    {
+        switch (op)
+        {
+        case '+':
+            return (double)a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return (double)a * b;
+        case '/':
+            if (b == 0) throw new UnsupportedOperationException("Cannot divide by zero");
+            return (double)a / b;
+        case '%':
+        return a % b;
+        case '^':
+        return Math.pow(a,b);
+        case '.':
+        return (double)(a*10+b)/10;
+        }
+        return 0;
+    }
+    
+    
     private void nineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nineActionPerformed
 txt.setText(txt.getText()+"9");
         // TODO add your handling code here:
@@ -389,6 +469,7 @@ txt.setText(txt.getText()+"2");
     private javax.swing.JButton five;
     private javax.swing.JButton four;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lbl;
     private javax.swing.JButton mul;
     private javax.swing.JButton nine;
     private javax.swing.JButton one;
