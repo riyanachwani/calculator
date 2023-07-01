@@ -6,8 +6,8 @@
 ## `Project Title`
 Calculator
 ## `Description`
-A Java internship project that performs basic arithmetic operations such as addition,
-subtraction, multiplication, and division.
+A Java internship project that performs basic arithmetic such as addition,
+subtraction, multiplication, division and more.
 
 ## `Tech Stack Used`
 <li>Java</li>
