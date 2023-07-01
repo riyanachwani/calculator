@@ -380,7 +380,8 @@ txt.setText(txt.getText()+"*");
                   values.push(applyOp(ops.pop(),values.pop(),values.pop()));
                 ops.pop();
             }
-            else if (tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '*' || tokens[i] == '/' || tokens[i] == '%' || tokens[i] == '^'  || tokens[i]=='.')
+            else if (tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '*' || tokens[i] == '/' || tokens[i] == '%' || tokens[i] == '^'  || 
+                    tokens[i]=='.')
             {
                 while (!ops.empty() && hasPrecedence(tokens[i],ops.peek()))
                   values.push(applyOp(ops.pop(),values.pop(), values.pop()));
