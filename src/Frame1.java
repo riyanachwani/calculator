@@ -12,7 +12,7 @@ import java.util.Stack;
  *
  * @author riyan
  */
-public class Frame1 extends javax.swing.JFrame implements ActionListener{
+public class Frame1 extends javax.swing.JFrame{
 
     /**
      * Creates new form Frame1
@@ -560,8 +560,5 @@ txt.setText(txt.getText()+")");
     private javax.swing.JButton zero;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+   
 }
